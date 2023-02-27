@@ -30,7 +30,34 @@ export function CoinProvider({ children }: CoinProviderProps) {
       }}
     >
       {children}
-      <CoinCatalogue/>
     </CoinContext.Provider>
   );
 }
+
+interface ObjectKeys {
+  [key: string]: any;
+}
+
+interface countryCodeMapping extends ObjectKeys {
+  usd: string;
+  gbp: string;
+  eur: string;
+}
+
+interface currencyMapping extends ObjectKeys {
+  usd: string;
+  gbp: string;
+  eur: string;
+}
+
+export const currencyMap: currencyMapping = {
+  usd: "$",
+  gbp: "£",
+  eur: "€",
+};
+
+export const countryCodeMap: countryCodeMapping = {
+  usd: "en-US",
+  gbp: "en-GB",
+  eur: "de-DE",
+};

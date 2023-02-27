@@ -33,7 +33,7 @@ function Banner() {
             input: "font-raleway dark:text-white dark:bg-zinc-800",
             dropdown:
               "dark:text-white dark:bg-zinc-800 border-1 border-blue-500",
-            item: "dark:text-white",
+            item: "dark:text-white dark:hover:bg-blue-300",
           }}
         />
       </div>
