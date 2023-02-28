@@ -25,20 +25,34 @@ function CoinCatalogue() {
   //console.log("Coins:", coins);
 
   return (
-    <section className="p-4 sm:p-8 dark:bg-zinc-800 bg-gray-100 h-full w-full">
-      {coins.map((coin: Coin, id: number) => {
-        if (id < 5) {
-          console.log(coin);
-          return (
-            <SingleCoin
-              key={coin.id}
-              currency={activeCurrency}
-              coinData={coin}
-            />
-          );
-        }
-      })}
-    </section>
+    <main className="p-4 sm:p-8 dark:bg-zinc-800 bg-gray-100 h-full w-full">
+      <div className="flex w-full pl-16 sm:pl-[5rem] gap-4 text-zinc-400">
+        <h2 className="hidden sm:block text-xl hover:border-b-[1px] hover-effect">Name</h2>
+        <h2 className="text-md sm:text-xl hover-effect">Current Price</h2>
+        <h2 className="text-md sm:text-xl hover-effect">24hrs ⇵</h2>
+        <h2 className="text-md sm:text-xl hover-effect">All Time High</h2>
+        <h2 className="text-md sm:text-xl hover-effect">All Time Low</h2>
+      </div>
+      <section className="h-[75vh] overflow-y-auto">
+        {coins.map((coin: Coin, id: number) => {
+          if (id < 15) {
+            console.log(coin);
+            let odd = true;
+            if (id % 2 == 0) {
+              odd = false;
+            }
+            return (
+              <SingleCoin
+                odd={odd}
+                key={coin.id}
+                currency={activeCurrency}
+                coinData={coin}
+              />
+            );
+          }
+        })}
+      </section>
+    </main>
   );
 }
 

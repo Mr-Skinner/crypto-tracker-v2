@@ -9,10 +9,10 @@ export default function Home() {
         <title>CryptoTracker</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <main className="h-[100vh] flex flex-col">
+      <body className="h-[100vh] flex flex-col">
         <Banner/>
         <CoinCatalogue/>
-      </main>
+      </body>
     </>
   )
 }

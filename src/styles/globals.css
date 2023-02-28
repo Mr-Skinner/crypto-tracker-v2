@@ -22,3 +22,30 @@ a {
   text-decoration: none;
 }
 
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+* {
+  scrollbar-width: auto;
+  scrollbar-color: #27272a #FFF;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 16px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #27272a;
+  border-radius: 1px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #FFF;
+  border-radius: 10px;
+  border: 6px solid #27272a;
+}
+/* ===== Scrollbar CSS ===== */
+
+.hover-effect {
+  @apply hover:border-b-[1px] hover:border-zinc-800 dark:hover:border-white hover:cursor-pointer
+}
