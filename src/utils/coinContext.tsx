@@ -1,5 +1,15 @@
-import CoinCatalogue from "@/components/Catalogue/CoinCatalogue";
-import { createContext, ReactNode, useContext, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useState,
+  useEffect,
+} from "react";
+import { useQuery } from "react-query";
+import fetchCoins from "@/utils/fetchCoins";
+import { Coin } from "@/utils/fetchCoins";
+
+interface CoinData extends Array<Coin> {}
 
 type CoinProviderProps = {
   children: ReactNode;
@@ -8,6 +18,12 @@ type CoinProviderProps = {
 type CoinContext = {
   activeCurrency: string;
   switchCurrency: (currency: string) => void;
+  coinData: CoinData;
+  setCoinData: (coins: CoinData) => void;
+  loading: boolean;
+  setLoading: (loading: boolean) => void;
+  errored: boolean;
+  setErrored: (errored: boolean) => void;
 };
 
 const CoinContext = createContext({} as CoinContext);
@@ -18,15 +34,44 @@ export function useCoin() {
 
 export function CoinProvider({ children }: CoinProviderProps) {
   const [activeCurrency, setActiveCurrency] = useState("usd");
+  const [coinData, setCoinData] = useState<CoinData>([]);
+  const [loading, setLoading] = useState(false);
+  const [errored, setErrored] = useState(false);
+
   function switchCurrency(currency: string) {
     setActiveCurrency(currency);
   }
+
+  const {
+    data: coins,
+    error,
+    isError,
+    isLoading,
+  } = useQuery(["coins", activeCurrency], () => fetchCoins(activeCurrency));
+
+  useEffect(() => {
+    if (coins) {
+      setCoinData(coins);
+    }
+    if (!isLoading) {
+      setLoading(isLoading);
+    }
+    if (!isError) {
+      setErrored(isError);
+    }
+  }, [coins]);
 
   return (
     <CoinContext.Provider
       value={{
         activeCurrency,
         switchCurrency,
+        coinData,
+        setCoinData,
+        loading,
+        setLoading,
+        errored,
+        setErrored,
       }}
     >
       {children}

@@ -1,28 +1,28 @@
-import { useEffect, useState } from "react";
-import { useQuery } from "react-query";
-import fetchCoins, { Coin } from "@/utils/fetchCoins";
+import { Coin } from "@/utils/fetchCoins";
 import { useCoin } from "@/utils/coinContext";
 
 import SingleCoin from "./SingleCoin";
 
 function CoinCatalogue() {
-  const { activeCurrency } = useCoin();
-  const {
-    data: coins,
-    error,
-    isError,
-    isLoading,
-  } = useQuery(["coins", activeCurrency], () => fetchCoins(activeCurrency));
+  const { activeCurrency, coinData, errored, loading, switchCurrency } = useCoin();
+  // const {
+  //   data: coins,
+  //   error,
+  //   isError,
+  //   isLoading,
+  // } = useQuery(["coins", activeCurrency], () => fetchCoins(activeCurrency));
 
-  if (isLoading) {
-    return <div>Loading...</div>;
+  if (loading) {
+    return <div className="text-blue-300 text-2xl">Loading...</div>;
   }
 
-  if (isError) {
-    return <div>Error!</div>;
+  if (errored) {
+    return <div className="text-red-300 text-2xl">Error!</div>;
   }
 
-  //console.log("Coins:", coins);
+  //console.log("coinData:", coinData);
+  //console.log("isError:", errored);
+  //console.log("isLoading:", loading);
 
   return (
     <main className="p-4 sm:p-8 dark:bg-zinc-800 bg-gray-100 h-full w-full">
@@ -34,9 +34,9 @@ function CoinCatalogue() {
         <h2 className="text-md sm:text-xl hover-effect">All Time Low</h2>
       </div>
       <section className="h-[75vh] overflow-y-auto">
-        {coins.map((coin: Coin, id: number) => {
+        {coinData.map((coin: Coin, id: number) => {
           if (id < 15) {
-            console.log(coin);
+            //console.log(coin);
             let odd = true;
             if (id % 2 == 0) {
               odd = false;

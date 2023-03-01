@@ -10,12 +10,6 @@ async function fetchCoins(currency: string) {
   return data;
 }
 
-export interface Coins {
-  usd: Coin[];
-  gbp: Coin[];
-  eur: Coin[];
-}
-
 export interface Coin {
   ath: number;
   ath_change_percentage: number;
