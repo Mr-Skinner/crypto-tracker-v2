@@ -1,8 +1,21 @@
+import { useState, useEffect } from "react";
 import { TextInput, Select } from "@mantine/core";
-import { useCoin } from '@/utils/coinContext';
+import { useCoin } from "@/utils/coinContext";
+import { useDebounce } from "@/hooks/useDebounce";
 
 function Banner() {
-  const { switchCurrency } = useCoin();
+  const [coinInput, setCoinInput] = useState("");
+  const { switchCurrency, setEnteredCoin } = useCoin();
+
+  const coinInputHandler = (inputCoin: string) => {
+    setCoinInput(inputCoin);
+  };
+
+  const debouncedCoinInput = useDebounce(coinInput, 300);
+
+  useEffect(() => {
+    setEnteredCoin(debouncedCoinInput);
+  }, [debouncedCoinInput]);
 
   return (
     <header className="w-full dark:bg-zinc-900 bg-white block sm:flex sm:justify-between drop-shadow-sm">
@@ -11,7 +24,9 @@ function Banner() {
       </div>
       <div className="flex p-2 w-full gap-4 sm:w-1/6 justify-around">
         <TextInput
+          onChange={(e) => coinInputHandler(e.target.value)}
           placeholder="Bitcoin"
+          value={coinInput}
           classNames={{
             root: "w-4/5 drop-shadow-md",
             input: "font-raleway dark:text-white dark:bg-zinc-800",
@@ -27,7 +42,9 @@ function Banner() {
             { value: "gbp", label: "£" },
             { value: "eur", label: "€" },
           ]}
-          onChange={(currency: string) => {switchCurrency(currency)}}
+          onChange={(currency: string) => {
+            switchCurrency(currency);
+          }}
           classNames={{
             root: "w-1/5 drop-shadow-md",
             input: "font-raleway dark:text-white dark:bg-zinc-800",

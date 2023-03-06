@@ -18,6 +18,8 @@ type CoinProviderProps = {
 type CoinContext = {
   activeCurrency: string;
   switchCurrency: (currency: string) => void;
+  enteredCoin: string;
+  setEnteredCoin: (enteredCoin: string) => void;
   coinData: CoinData;
   setCoinData: (coins: CoinData) => void;
   loading: boolean;
@@ -34,6 +36,7 @@ export function useCoin() {
 
 export function CoinProvider({ children }: CoinProviderProps) {
   const [activeCurrency, setActiveCurrency] = useState("usd");
+  const [enteredCoin, setEnteredCoin] = useState("");
   const [coinData, setCoinData] = useState<CoinData>([]);
   const [loading, setLoading] = useState(false);
   const [errored, setErrored] = useState(false);
@@ -66,6 +69,8 @@ export function CoinProvider({ children }: CoinProviderProps) {
       value={{
         activeCurrency,
         switchCurrency,
+        enteredCoin,
+        setEnteredCoin,
         coinData,
         setCoinData,
         loading,
