@@ -20,6 +20,8 @@ type CoinContext = {
   switchCurrency: (currency: string) => void;
   enteredCoin: string;
   setEnteredCoin: (enteredCoin: string) => void;
+  sortBy: string;
+  changeSort: (sortBy: string) => void;
   coinData: CoinData;
   setCoinData: (coins: CoinData) => void;
   loading: boolean;
@@ -37,12 +39,17 @@ export function useCoin() {
 export function CoinProvider({ children }: CoinProviderProps) {
   const [activeCurrency, setActiveCurrency] = useState("usd");
   const [enteredCoin, setEnteredCoin] = useState("");
+  const [sortBy, setSortBy] = useState("market_cap");
   const [coinData, setCoinData] = useState<CoinData>([]);
   const [loading, setLoading] = useState(false);
   const [errored, setErrored] = useState(false);
 
   function switchCurrency(currency: string) {
     setActiveCurrency(currency);
+  }
+
+  function changeSort(sortBy: string) {
+    setSortBy(sortBy);
   }
 
   const {
@@ -71,6 +78,8 @@ export function CoinProvider({ children }: CoinProviderProps) {
         switchCurrency,
         enteredCoin,
         setEnteredCoin,
+        sortBy, 
+        changeSort,
         coinData,
         setCoinData,
         loading,

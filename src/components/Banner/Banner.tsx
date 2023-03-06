@@ -5,10 +5,14 @@ import { useDebounce } from "@/hooks/useDebounce";
 
 function Banner() {
   const [coinInput, setCoinInput] = useState("");
-  const { switchCurrency, setEnteredCoin } = useCoin();
+  const { switchCurrency, setEnteredCoin, changeSort } = useCoin();
 
   const coinInputHandler = (inputCoin: string) => {
     setCoinInput(inputCoin);
+  };
+
+  const sortCoinsHandler = (criteria: string) => {
+    changeSort(criteria);
   };
 
   const debouncedCoinInput = useDebounce(coinInput, 300);
@@ -44,6 +48,31 @@ function Banner() {
           ]}
           onChange={(currency: string) => {
             switchCurrency(currency);
+          }}
+          classNames={{
+            root: "w-1/5 drop-shadow-md",
+            input: "font-raleway dark:text-white dark:bg-zinc-800",
+            dropdown:
+              "dark:text-white dark:bg-zinc-800 border-1 border-blue-500",
+            item: "dark:text-white dark:hover:bg-blue-300",
+          }}
+        />
+        <Select
+          transition="pop-top-left"
+          transitionDuration={80}
+          transitionTimingFunction="ease"
+          placeholder="Sort"
+          data={[
+            { value: "market_cap", label: "Market Cap" },
+            { value: "favourites", label: "Favourites" },
+            { value: "name_asc", label: "Name (asc)" },
+            { value: "name_desc", label: "Name (desc)" },
+            { value: "price_asc", label: "Price (asc)" },
+            { value: "price_desc", label: "Price (desc)" },
+            { value: "top_movers", label: "Top Movers" },
+          ]}
+          onChange={(criteria: string) => {
+            sortCoinsHandler(criteria);
           }}
           classNames={{
             root: "w-1/5 drop-shadow-md",
