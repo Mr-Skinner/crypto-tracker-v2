@@ -49,3 +49,11 @@ a {
 .hover-effect {
   @apply hover:border-b-[1px] hover:border-zinc-800 dark:hover:border-white hover:cursor-pointer
 }
+
+.footer {
+  @apply sm:hidden fixed bottom-0 h-[6vh] w-full bg-white dark:bg-zinc-900 flex justify-center duration-100 ease-in
+}
+
+.footer-expanded {
+ @apply sm:hidden fixed bottom-0 h-[15vh] w-full bg-white dark:bg-zinc-900 flex flex-col duration-200 ease-in
+}

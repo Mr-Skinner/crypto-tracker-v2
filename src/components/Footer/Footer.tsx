@@ -1,39 +1,52 @@
-import { useState, useEffect } from "react";
-import { TextInput, Select } from "@mantine/core";
+import { useState } from "react";
+import { ActionIcon, Select } from "@mantine/core";
+import { IconMenu2 } from "@tabler/icons-react";
+import { Burger } from "@mantine/core";
 import { useCoin } from "@/utils/coinContext";
-import { useDebounce } from "@/hooks/useDebounce";
 
-function Banner() {
-  const [coinInput, setCoinInput] = useState("");
-  const { switchCurrency, setEnteredCoin, changeSort } = useCoin();
+export default function Footer() {
+  const { switchCurrency, changeSort } = useCoin();
+  const [isExpanded, setIsExpanded] = useState(false);
 
-  const coinInputHandler = (inputCoin: string) => {
-    setCoinInput(inputCoin);
-  };
+  const sortSelectRootClass = isExpanded
+    ? "w-3/5 drop-shadow-md mx-auto"
+    : "hidden";
 
-  const debouncedCoinInput = useDebounce(coinInput, 300);
-
-  useEffect(() => {
-    setEnteredCoin(debouncedCoinInput);
-  }, [debouncedCoinInput]);
-
-  const selectRootClass = "hidden sm:block w-1/5 drop-shadow-md";
+  const currSelectRootClass = isExpanded
+    ? "w-1/5 drop-shadow-md mx-auto"
+    : "hidden";
 
   return (
-    <header className="w-full dark:bg-zinc-900 bg-white block sm:flex sm:justify-between drop-shadow-sm">
-      <div className="dark:text-white text-zinc-800 text-3xl p-2 text-center">
-        Crypto Tracker v2
-      </div>
-      <div className="flex p-2 w-full gap-4 sm:w-1/6 justify-around">
-        <TextInput
-          onChange={(e) => coinInputHandler(e.target.value)}
-          placeholder="Bitcoin"
-          value={coinInput}
-          classNames={{
-            root: "w-4/5 drop-shadow-md",
-            input: "font-raleway dark:text-white dark:bg-zinc-800",
-          }}
-        />
+    <div
+      className={
+        !isExpanded
+          ? "footer transition-height"
+          : "footer-expanded transition-height"
+      }
+    >
+      {/* <ActionIcon
+        className="dark:hover:bg-transparent w-8 h-8 mx-auto my-2"
+        onClick={() => {
+          setIsExpanded(!isExpanded);
+        }}
+      >
+        <IconMenu2
+          size={"2rem"}
+          className="text-zinc-600 dark:text-white"
+        ></IconMenu2>
+      </ActionIcon> */}
+      <Burger
+        classNames={{
+          root: "w-8 h-8 mx-auto my-2",
+          burger:
+            "bg-zinc-600 dark:bg-white before:bg-zinc-600 dark:before:bg-white after:bg-zinc-600 dark:after:bg-white",
+        }}
+        opened={isExpanded}
+        onClick={() => {
+          setIsExpanded(!isExpanded);
+        }}
+      ></Burger>
+      <div className="flex">
         <Select
           transition="pop-top-left"
           transitionDuration={80}
@@ -48,7 +61,7 @@ function Banner() {
             switchCurrency(currency);
           }}
           classNames={{
-            root: selectRootClass,
+            root: currSelectRootClass,
             input: "font-raleway dark:text-white dark:bg-zinc-800",
             dropdown:
               "dark:text-white dark:bg-zinc-800 border-1 border-blue-500",
@@ -73,7 +86,7 @@ function Banner() {
             changeSort(criteria);
           }}
           classNames={{
-            root: selectRootClass,
+            root: sortSelectRootClass,
             input: "font-raleway dark:text-white dark:bg-zinc-800",
             dropdown:
               "dark:text-white dark:bg-zinc-800 border-1 border-blue-500",
@@ -81,8 +94,6 @@ function Banner() {
           }}
         />
       </div>
-    </header>
+    </div>
   );
 }
-
-export default Banner;
