@@ -1,14 +1,5 @@
 import axios from "axios";
-
-async function fetchCoins(currency: string) {
-  const coingeckoUrl =
-    "https://api.coingecko.com/api/v3/coins/markets?vs_currency=" +
-    currency +
-    "&order=market_cap_desc&per_page=100&page=1&sparkline=false";
-
-  const { data } = await axios.get(coingeckoUrl);
-  return data;
-}
+import { useQuery } from "react-query";
 
 export interface Coin {
   ath: number;
@@ -37,6 +28,28 @@ export interface Coin {
   symbol: string;
   total_supply: number;
   total_volume: number;
+}
+
+interface CoinData extends Array<Coin> {}
+
+function fetchCoins(currency: string) {
+  const coingeckoUrl =
+    "https://api.coingecko.com/api/v3/coins/markets?vs_currency=" +
+    currency +
+    "&order=market_cap_desc&per_page=100&page=1&sparkline=false";
+
+  const { isLoading, error, data, isFetching } = useQuery<CoinData>({
+    queryKey: ["coins"],
+    queryFn: () =>
+      axios
+        .get(coingeckoUrl)
+        .then((res) => res.data),
+  });
+
+  if (isLoading || isFetching) return "Refreshing...";
+  if (error) return "An error has occurred";
+
+  return data;
 }
 
 export default fetchCoins;

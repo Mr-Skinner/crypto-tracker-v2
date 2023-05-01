@@ -1,24 +1,27 @@
-import { Coin } from "@/utils/fetchCoins";
+import fetchCoins, { Coin } from "@/utils/fetchCoins";
 import { useCoin } from "@/utils/coinContext";
 
 import SingleCoin from "./SingleCoin";
 
 function CoinCatalogue() {
-  const { activeCurrency, coinData, errored, loading, enteredCoin, sortBy } =
-    useCoin();
-  // const {
-  //   data: coins,
-  //   error,
-  //   isError,
-  //   isLoading,
-  // } = useQuery(["coins", activeCurrency], () => fetchCoins(activeCurrency));
+  const { activeCurrency, enteredCoin, sortBy } = useCoin();
 
-  if (loading) {
-    return <div className="text-blue-300 text-2xl">Loading...</div>;
+  const coinData = fetchCoins(activeCurrency);
+
+  if (coinData == "Refreshing..." || coinData == "An error has occurred") {
+    return (
+      <main className="p-4 sm:p-8 dark:bg-zinc-800 bg-gray-100 h-full w-full">
+        {coinData}
+      </main>
+    );
   }
 
-  if (errored) {
-    return <div className="text-red-300 text-2xl">Error!</div>;
+  if (!coinData) {
+    return (
+      <main className="p-4 sm:p-8 dark:bg-zinc-800 bg-gray-100 h-full w-full">
+        Unexpected error, api response is null!
+      </main>
+    );
   }
 
   //console.log("coinData:", coinData);

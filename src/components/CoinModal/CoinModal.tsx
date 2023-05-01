@@ -2,7 +2,6 @@ import { Coin } from "@/utils/fetchCoins";
 import { Chart, CategoryScale } from "chart.js/auto";
 import { Line } from "react-chartjs-2";
 import { useState, useEffect } from "react";
-import { useQuery } from "react-query";
 import fetchPriceHistory from "@/utils/fetchPriceHistory";
 
 interface CoinInfoProps {
@@ -18,32 +17,24 @@ export default function CoinModal({ currency, coinData }: CoinInfoProps) {
 
   const [fromDate, setFromDate] = useState(yesterday);
   const [timeScale, setTimeScale] = useState("24h");
-  const [priceHistory, setPriceHistory] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errored, setErrored] = useState(false);
 
   //console.log(coinData);
 
-  const {
-    data: prices,
-    error,
-    isError,
-    isLoading,
-  } = useQuery(["prices", coinData.id, currency, fromDate, now], () =>
-    fetchPriceHistory(coinData.id, currency, fromDate, now)
-  );
+  const prices = fetchPriceHistory(coinData.id, currency, fromDate, now);
 
-  useEffect(() => {
-    if (prices) {
-      setPriceHistory(prices);
-    }
-    if (!isLoading) {
-      setLoading(isLoading);
-    }
-    if (!isError) {
-      setErrored(isError);
-    }
-  }, [prices]);
+  if (prices == "Refreshing..." || prices == "An error has occurred") {
+    return <div className="text-blue-300 text-2xl">{prices}</div>;
+  }
+
+  if (!prices) {
+    return (
+      <div className="text-blue-300 text-2xl">
+        Unexpected error, api response is null!
+      </div>
+    );
+  }
 
   let graphData = {
     labels: [],
@@ -86,13 +77,13 @@ export default function CoinModal({ currency, coinData }: CoinInfoProps) {
 
   //console.log(priceHistory);
 
-  if (priceHistory.length > 0) {
+  if (prices.length > 0) {
     let priceDates: never[] = [];
     let priceValues: never[] = [];
 
-    priceHistory.forEach((subArrayValue, i) => {
-      priceDates.push(subArrayValue[0]);
-      priceValues.push(subArrayValue[1]);
+    prices.forEach((subArrayValues: never, i: number) => {
+      priceDates.push(subArrayValues[0]);
+      priceValues.push(subArrayValues[1]);
     });
 
     if (priceValues && priceValues.length > 0) {

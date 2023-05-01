@@ -1,6 +1,7 @@
 import axios from "axios";
+import { useQuery } from "react-query";
 
-async function fetchPriceHistory(
+function fetchPriceHistory(
   id: string,
   currency: string,
   fromDate: number,
@@ -23,10 +24,19 @@ async function fetchPriceHistory(
     "&to=" +
     now +
     "";
-  const { data } = await axios.get(coingeckoUrl);
-  const priceData = data.prices;
 
-  return priceData?.map(convertDateTime) ?? null;
+  const { isLoading, error, data, isFetching } = useQuery({
+    queryKey: ["prices"],
+    queryFn: () => axios.get(coingeckoUrl).then((res) => res.data),
+  });
+
+  if (isLoading || isFetching) return "Refreshing...";
+  if (error) return "An error has occurred";
+
+  if (data) {
+    const priceData = data.prices;
+    return priceData?.map(convertDateTime) ?? null;
+  }
 }
 
 export default fetchPriceHistory;
